@@ -1,4 +1,4 @@
-version: '3.8'
+#version: '3.8'
 
 services:
   # The Frontend Service (our HTML/JS user interface)
@@ -24,7 +24,7 @@ services:
       - "5001:5001"
     volumes:
       # Mount our backend code so we can make changes without rebuilding the image.
-      - ./backend:/app
+      - .:/app
     depends_on:
       - db
 
