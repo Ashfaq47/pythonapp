@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docker To-Do List</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f4f7f9; margin: 0; padding: 2rem; display: flex; justify-content: center; }
+        .container { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
+        h1 { text-align: center; color: #333; }
+        input[type="text"] { width: calc(100% - 22px); padding: 10px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 1rem; }
+        button { width: 100%; padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1rem; }
+        button:hover { background-color: #0056b3; }
+        ul { list-style-type: none; padding: 0; }
+        li { background: #f9f9f9; padding: 10px; border-bottom: 1px solid #eee; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Docker To-Do List</h1>
+        <input type="text" id="taskInput" placeholder="Enter a new task...">
+        <button onclick="addTask()">Add Task</button>
+        <ul id="taskList"></ul>
+    </div>
+
+    <script>
+        // The address of our backend API. Docker Compose lets us use the service name 'backend'.
+        const apiUrl = 'http://localhost:5001';
+
+        // Function to get all tasks and display them
+        async function getTasks() {
+            const response = await fetch(`${apiUrl}/tasks`);
+            const tasks = await response.json();
+            const taskList = document.getElementById('taskList');
+            taskList.innerHTML = ''; // Clear the list first
+            tasks.forEach(task => {
+                const li = document.createElement('li');
+                li.textContent = task.description;
+                taskList.appendChild(li);
+            });
+        }
+
+        // Function to add a new task
+        async function addTask() {
+            const taskInput = document.getElementById('taskInput');
+            const description = taskInput.value;
+            if (!description) return; // Don't add empty tasks
+
+            await fetch(`${apiUrl}/tasks`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ description: description })
+            });
+            taskInput.value = ''; // Clear the input box
+            getTasks(); // Refresh the list
+        }
+
+        // Load the initial list of tasks when the page loads
+        window.onload = getTasks;
+    </script>
+</body>
+</html>
