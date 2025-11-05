@@ -18,7 +18,7 @@ services:
   # The Backend Service (our Python API)
   backend:
     # Build the image from the Dockerfile in the 'backend' folder.
-    build: ./backend
+    build: .
     ports:
       # Expose port 5001 on our computer for the API.
       - "5001:5001"
