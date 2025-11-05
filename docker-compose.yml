@@ -11,7 +11,7 @@ services:
     volumes:
       # This is important: it "mounts" our local frontend folder into the container.
       # This means NGINX will serve the index.html file directly from our folder.
-      - ./frontend:/usr/share/nginx/html
+      - .:/usr/share/nginx/html
     depends_on:
       - backend
 
