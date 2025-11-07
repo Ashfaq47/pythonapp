@@ -9,7 +9,7 @@ services:
       # Expose port 80 on our computer and map it to port 80 in the container.
       - "80:80"
     volumes:
-      # This is important: it "mounts" our local frontend folder into the container.
+      # This is important: it "mounts" our local frontend code into the container.
       # This means NGINX will serve the index.html file directly from our folder.
       - .:/usr/share/nginx/html
     depends_on:
