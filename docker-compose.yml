@@ -1,46 +1,31 @@
-#version: '3.8'
+#version:'3.8'
 
-services:
-  # The Frontend Service (our HTML/JS user interface)
+services: 
+  #The frontend Service
   frontend:
-    # We'll use a standard NGINX image to serve our static HTML file.
     image: nginx:alpine
-    ports:
-      # Expose port 80 on our computer and map it to port 80 in the container.
-      - "80:80"
+    ports: "80:80"
     volumes:
-      # This is important: it "mounts" our local frontend code into the container.
-      # This means NGINX will serve the index.html file directly from our folder.
       - .:/usr/share/nginx/html
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
       - backend
 
-  # The Backend Service (our Python API)
   backend:
-    # Build the image from the Dockerfile in the 'backend' folder.
     build: .
     ports:
-      # Expose port 5001 on our computer for the API.
-      - "5001:5001"
+      - 5001:5001
     volumes:
-      # Mount our backend code so we can make changes without rebuilding the image.
       - .:/app
     depends_on:
       - db
-
-  # The Database Service (our MongoDB)
+  
   db:
-    # Use the official MongoDB image.
     image: mongo:4.4
     ports:
-      # Expose the MongoDB port if we wanted to connect directly (optional).
-      - "27017:27017"
+      - 27017:27017
     volumes:
-      # This creates a "volume" to store the database data persistently.
-      # Even if we stop and remove the container, the data will still be here.
-      - mongo-data:/data/db
+      - mongo-db:/data/db
 
-# This defines the persistent volume for our database.
 volumes:
-  mongo-data:
+  mongo-db:
